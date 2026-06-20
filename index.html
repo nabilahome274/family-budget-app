@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>পারিবারিক বাজেট</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0F172A">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  :root {
+    --bg: #0F172A;
+    --card: #1E293B;
+    --accent: #22C55E;
+    --accent-dim: #16A34A;
+    --danger: #EF4444;
+    --text: #F1F5F9;
+    --text-dim: #94A3B8;
+    --border: #334155;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px 16px 80px;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-top: env(safe-area-inset-top, 10px);
+  }
+  .header h1 {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .header p {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+  .type-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .type-btn {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 8px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .type-btn.active {
+    border-color: var(--accent);
+    background: rgba(34, 197, 94, 0.12);
+    color: var(--accent);
+  }
+  .card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .field {
+    margin-bottom: 16px;
+  }
+  .field:last-child { margin-bottom: 0; }
+  label {
+    display: block;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  input, select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 13px 14px;
+    color: var(--text);
+    font-size: 16px;
+    font-family: inherit;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  select {
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%2394A3B8" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+  }
+  .submit-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #04130A;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .submit-btn:active { background: var(--accent-dim); }
+  .submit-btn:disabled { opacity: 0.6; }
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 16px;
+    right: 16px;
+    background: var(--card);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 14px 16px;
+    text-align: center;
+    font-size: 14px;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.25s ease;
+    pointer-events: none;
+  }
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .toast.error {
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+  .section-hint {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: -4px;
+    margin-bottom: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>💰 পারিবারিক বাজেট</h1>
+  <p id="dateDisplay"></p>
+</div>
+
+<div class="type-selector" id="typeSelector">
+  <div class="type-btn active" data-type="খরচ">📤 খরচ</div>
+  <div class="type-btn" data-type="আয়">📥 আয়</div>
+  <div class="type-btn" data-type="সঞ্চয়">💰 সঞ্চয়</div>
+</div>
+
+<form id="entryForm">
+  <div class="card">
+
+    <div class="field">
+      <label>তারিখ</label>
+      <input type="date" id="date" required>
+    </div>
+
+    <!-- Expense fields -->
+    <div id="expenseFields">
+      <div class="field">
+        <label>খরচের ক্যাটাগরি</label>
+        <select id="expCategory" required>
+          <option value="">নির্বাচন করুন</option>
+          <option value="খাবার">খাবার</option>
+          <option value="বাজার">বাজার</option>
+          <option value="বাসা ভাড়া">বাসা ভাড়া</option>
+          <option value="বিল">বিল</option>
+          <option value="পরিবহন">পরিবহন</option>
+          <option value="স্বাস্থ্য">স্বাস্থ্য</option>
+          <option value="শিক্ষা">শিক্ষা</option>
+          <option value="পোশাক">পোশাক</option>
+          <option value="বিনোদন">বিনোদন</option>
+          <option value="অন্যান্য">অন্যান্য</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>বিস্তারিত/আইটেম (ঐচ্ছিক)</label>
+        <input type="text" id="expDetail" placeholder="যেমন: চাল ৫ কেজি, মাছ ১ কেজি">
+      </div>
+      <div class="field">
+        <label>খরচের পরিমাণ (টাকা)</label>
+        <input type="number" id="expAmount" min="1" placeholder="0">
+      </div>
+      <div class="field">
+        <label>পেমেন্ট মেথড</label>
+        <select id="paymentMethod">
+          <option value="">নির্বাচন করুন</option>
+          <option value="Cash">Cash</option>
+          <option value="Card">Card</option>
+          <option value="bKash">bKash</option>
+          <option value="Bank">Bank</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Income fields -->
+    <div id="incomeFields" style="display:none;">
+      <div class="field">
+        <label>আয়ের উৎস</label>
+        <select id="incSource">
+          <option value="">নির্বাচন করুন</option>
+          <option value="ব্যবসা/ফ্রিল্যান্স">ব্যবসা/ফ্রিল্যান্স</option>
+          <option value="বেতন">বেতন</option>
+          <option value="ভাড়া">ভাড়া</option>
+          <option value="AUMATIQ ইনকাম">AUMATIQ ইনকাম</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>আয়ের পরিমাণ (টাকা)</label>
+        <input type="number" id="incAmount" min="1" placeholder="0">
+      </div>
+    </div>
+
+    <!-- Savings fields -->
+    <div id="savingsFields" style="display:none;">
+      <div class="field">
+        <label>সঞ্চয়ের ধরন</label>
+        <select id="savType">
+          <option value="">নির্বাচন করুন</option>
+          <option value="সাধারণ সেভিংস (Bank/Cash)">সাধারণ সেভিংস (Bank/Cash)</option>
+          <option value="DPS/Fixed Deposit">DPS/Fixed Deposit</option>
+          <option value="লক্ষ্যভিত্তিক সেভিংস">লক্ষ্যভিত্তিক সেভিংস</option>
+          <option value="ইনভেস্টমেন্ট (Stock/Crypto)">ইনভেস্টমেন্ট (Stock/Crypto)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>লক্ষ্যের নাম (যদি লক্ষ্যভিত্তিক হয়)</label>
+        <input type="text" id="savGoal" placeholder="যেমন: বাচ্চাদের শিক্ষা, হজ্জ">
+      </div>
+      <div class="field">
+        <label>সঞ্চয়ের পরিমাণ (টাকা)</label>
+        <input type="number" id="savAmount" min="1" placeholder="0">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>নোট (ঐচ্ছিক)</label>
+      <input type="text" id="note" placeholder="অতিরিক্ত কোনো নোট">
+    </div>
+
+  </div>
+
+  <button type="submit" class="submit-btn" id="submitBtn">এন্ট্রি জমা দিন</button>
+</form>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ⚠️ IMPORTANT: Paste your Apps Script Web App URL here after deployment
+// (See the setup guide, Step: "Deploy the Web App")
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxlSvXEWPNCm4XxGE27KuF4Jo4TKliHihPi6jKUK8XIUsvQHgevZJWK8yvKm5og-fLM/exec";
+
+const typeButtons = document.querySelectorAll('.type-btn');
+const expenseFields = document.getElementById('expenseFields');
+const incomeFields = document.getElementById('incomeFields');
+const savingsFields = document.getElementById('savingsFields');
+let currentType = "খরচ";
+
+document.getElementById('date').valueAsDate = new Date();
+document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('bn-BD', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+typeButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    typeButtons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentType = btn.dataset.type;
+
+    expenseFields.style.display = currentType === "খরচ" ? "block" : "none";
+    incomeFields.style.display = currentType === "আয়" ? "block" : "none";
+    savingsFields.style.display = currentType === "সঞ্চয়" ? "block" : "none";
+  });
+});
+
+function showToast(message, isError = false) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.className = 'toast show' + (isError ? ' error' : '');
+  setTimeout(() => { toast.className = 'toast'; }, 3000);
+}
+
+document.getElementById('entryForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  if (WEB_APP_URL === "PASTE_YOUR_WEB_APP_URL_HERE") {
+    showToast("⚠️ এখনো Web App URL সেট করা হয়নি — গাইড দেখুন", true);
+    return;
+  }
+
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = "জমা হচ্ছে...";
+
+  const dateVal = document.getElementById('date').value; // YYYY-MM-DD
+  const payload = {
+    "এন্ট্রির ধরন": currentType,
+    "তারিখ": dateVal,
+    "নোট (ঐচ্ছিক)": document.getElementById('note').value
+  };
+
+  let amount = 0;
+
+  if (currentType === "খরচ") {
+    payload["খরচের ক্যাটাগরি"] = document.getElementById('expCategory').value;
+    payload["বিস্তারিত/আইটেম (ঐচ্ছিক)"] = document.getElementById('expDetail').value;
+    payload["খরচের পরিমাণ (টাকা)"] = document.getElementById('expAmount').value;
+    payload["পেমেন্ট মেথড"] = document.getElementById('paymentMethod').value;
+    amount = Number(document.getElementById('expAmount').value);
+
+    if (!payload["খরচের ক্যাটাগরি"]) {
+      showToast("⚠️ ক্যাটাগরি নির্বাচন করুন", true);
+      submitBtn.disabled = false; submitBtn.textContent = "এন্ট্রি জমা দিন";
+      return;
+    }
+  } else if (currentType === "আয়") {
+    payload["আয়ের উৎস"] = document.getElementById('incSource').value;
+    payload["আয়ের পরিমাণ (টাকা)"] = document.getElementById('incAmount').value;
+    amount = Number(document.getElementById('incAmount').value);
+
+    if (!payload["আয়ের উৎস"]) {
+      showToast("⚠️ আয়ের উৎস নির্বাচন করুন", true);
+      submitBtn.disabled = false; submitBtn.textContent = "এন্ট্রি জমা দিন";
+      return;
+    }
+  } else if (currentType === "সঞ্চয়") {
+    payload["সঞ্চয়ের ধরন"] = document.getElementById('savType').value;
+    payload["লক্ষ্যের নাম (যদি লক্ষ্যভিত্তিক হয়)"] = document.getElementById('savGoal').value;
+    payload["সঞ্চয়ের পরিমাণ (টাকা)"] = document.getElementById('savAmount').value;
+    amount = Number(document.getElementById('savAmount').value);
+
+    if (!payload["সঞ্চয়ের ধরন"]) {
+      showToast("⚠️ সঞ্চয়ের ধরন নির্বাচন করুন", true);
+      submitBtn.disabled = false; submitBtn.textContent = "এন্ট্রি জমা দিন";
+      return;
+    }
+  }
+
+  if (!amount || amount <= 0) {
+    showToast("⚠️ সঠিক পরিমাণ লিখুন", true);
+    submitBtn.disabled = false; submitBtn.textContent = "এন্ট্রি জমা দিন";
+    return;
+  }
+
+  try {
+    await fetch(WEB_APP_URL, {
+      method: 'POST',
+      mode: 'no-cors', // Apps Script Web Apps require no-cors from browser fetch
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload)
+    });
+
+    showToast("✅ এন্ট্রি সফলভাবে জমা হয়েছে");
+    document.getElementById('entryForm').reset();
+    document.getElementById('date').valueAsDate = new Date();
+
+  } catch (err) {
+    showToast("❌ এরর হয়েছে, আবার চেষ্টা করুন", true);
+    console.error(err);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "এন্ট্রি জমা দিন";
+  }
+});
+
+// Register service worker for offline app shell + installability
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
+  });
+}
+</script>
+
+</body>
+</html>

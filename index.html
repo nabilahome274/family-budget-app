@@ -31,15 +31,9 @@
     margin-bottom: 24px;
     padding-top: env(safe-area-inset-top, 10px);
   }
-  .header h1 {
-    font-size: 20px;
-    font-weight: 700;
-  }
-  .header p {
-    font-size: 13px;
-    color: var(--text-dim);
-    margin-top: 4px;
-  }
+  .header h1 { font-size: 20px; font-weight: 700; }
+  .header p { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+
   .type-selector {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -57,6 +51,8 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
   }
   .type-btn.active {
     border-color: var(--accent);
@@ -69,9 +65,7 @@
     padding: 20px;
     margin-bottom: 16px;
   }
-  .field {
-    margin-bottom: 16px;
-  }
+  .field { margin-bottom: 16px; }
   .field:last-child { margin-bottom: 0; }
   label {
     display: block;
@@ -96,11 +90,15 @@
   }
   select {
     appearance: none;
+    -webkit-appearance: none;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%2394A3B8" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>');
     background-repeat: no-repeat;
     background-position: right 14px center;
     padding-right: 40px;
   }
+  /* Fix: select option text color on Android */
+  select option { color: #0F172A; background: #fff; }
+
   .submit-btn {
     width: 100%;
     background: var(--accent);
@@ -112,9 +110,11 @@
     font-weight: 700;
     cursor: pointer;
     margin-top: 8px;
+    -webkit-tap-highlight-color: transparent;
   }
   .submit-btn:active { background: var(--accent-dim); }
-  .submit-btn:disabled { opacity: 0.6; }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
   .toast {
     position: fixed;
     bottom: 24px;
@@ -130,23 +130,12 @@
     opacity: 0;
     transition: all 0.25s ease;
     pointer-events: none;
+    z-index: 999;
   }
-  .toast.show {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  .toast.error {
-    border-color: var(--danger);
-    color: var(--danger);
-  }
-  .section-hint {
-    font-size: 12px;
-    color: var(--text-dim);
-    margin-top: -4px;
-    margin-bottom: 14px;
-  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.error { border-color: var(--danger); color: var(--danger); }
 
-  /* ===== Review Screen (confirmation before saving) ===== */
+  /* ===== Review Screen ===== */
   .review-overlay {
     display: none;
     position: fixed;
@@ -162,15 +151,9 @@
     margin-bottom: 20px;
     padding-top: env(safe-area-inset-top, 10px);
   }
-  .review-header h2 {
-    font-size: 18px;
-    font-weight: 700;
-  }
-  .review-header p {
-    font-size: 13px;
-    color: var(--text-dim);
-    margin-top: 4px;
-  }
+  .review-header h2 { font-size: 18px; font-weight: 700; }
+  .review-header p { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+
   .review-card {
     background: var(--card);
     border-radius: 16px;
@@ -186,22 +169,10 @@
     gap: 12px;
   }
   .review-row:last-child { border-bottom: none; }
-  .review-label {
-    font-size: 13px;
-    color: var(--text-dim);
-    flex: 0 0 40%;
-  }
-  .review-value {
-    font-size: 15px;
-    font-weight: 600;
-    text-align: right;
-    flex: 1;
-    word-break: break-word;
-  }
-  .review-value.amount {
-    color: var(--accent);
-    font-size: 17px;
-  }
+  .review-label { font-size: 13px; color: var(--text-dim); flex: 0 0 40%; }
+  .review-value { font-size: 15px; font-weight: 600; text-align: right; flex: 1; word-break: break-word; }
+  .review-value.amount { color: var(--accent); font-size: 17px; }
+
   .review-type-badge {
     display: inline-block;
     padding: 6px 14px;
@@ -210,9 +181,10 @@
     font-weight: 700;
     margin-bottom: 16px;
   }
-  .review-type-badge.খরচ { background: rgba(239, 68, 68, 0.15); color: #F87171; }
-  .review-type-badge.আয় { background: rgba(34, 197, 94, 0.15); color: var(--accent); }
-  .review-type-badge.সঞ্চয় { background: rgba(250, 204, 21, 0.15); color: #FACC15; }
+  .review-type-badge.খরচ { background: rgba(239,68,68,0.15); color: #F87171; }
+  .review-type-badge.আয় { background: rgba(34,197,94,0.15); color: var(--accent); }
+  .review-type-badge.সঞ্চয় { background: rgba(250,204,21,0.15); color: #FACC15; }
+
   .review-btn-group {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -228,6 +200,7 @@
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
   .btn-edit:active { border-color: var(--text-dim); }
   .btn-confirm {
@@ -239,9 +212,10 @@
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
   .btn-confirm:active { background: var(--accent-dim); }
-  .btn-confirm:disabled, .btn-edit:disabled { opacity: 0.6; }
+  .btn-confirm:disabled, .btn-edit:disabled { opacity: 0.6; cursor: not-allowed; }
 </style>
 </head>
 <body>
@@ -257,7 +231,7 @@
   <div class="type-btn" data-type="সঞ্চয়">💰 সঞ্চয়</div>
 </div>
 
-<form id="entryForm">
+<form id="entryForm" novalidate>
   <div class="card">
 
     <div class="field">
@@ -289,7 +263,7 @@
       </div>
       <div class="field">
         <label>খরচের পরিমাণ (টাকা)</label>
-        <input type="number" id="expAmount" min="1" placeholder="0">
+        <input type="number" id="expAmount" min="1" placeholder="0" inputmode="numeric">
       </div>
       <div class="field">
         <label>পেমেন্ট মেথড</label>
@@ -317,7 +291,7 @@
       </div>
       <div class="field">
         <label>আয়ের পরিমাণ (টাকা)</label>
-        <input type="number" id="incAmount" min="1" placeholder="0">
+        <input type="number" id="incAmount" min="1" placeholder="0" inputmode="numeric">
       </div>
     </div>
 
@@ -339,7 +313,7 @@
       </div>
       <div class="field">
         <label>সঞ্চয়ের পরিমাণ (টাকা)</label>
-        <input type="number" id="savAmount" min="1" placeholder="0">
+        <input type="number" id="savAmount" min="1" placeholder="0" inputmode="numeric">
       </div>
     </div>
 
@@ -353,17 +327,13 @@
   <button type="submit" class="submit-btn" id="submitBtn">পরীক্ষা করুন ও জমা দিন</button>
 </form>
 
-<!-- ===== Review Screen — shown before actual save ===== -->
+<!-- Review Screen -->
 <div class="review-overlay" id="reviewOverlay">
   <div class="review-header">
     <h2>✅ এন্ট্রি যাচাই করুন</h2>
     <p>সব তথ্য ঠিক থাকলে "নিশ্চিত করুন" চাপুন, ভুল থাকলে "এডিট করুন" চাপুন</p>
   </div>
-
-  <div class="review-card" id="reviewCard">
-    <!-- Filled dynamically by JS -->
-  </div>
-
+  <div class="review-card" id="reviewCard"></div>
   <div class="review-btn-group">
     <button type="button" class="btn-edit" id="editBtn">✏️ এডিট করুন</button>
     <button type="button" class="btn-confirm" id="confirmBtn">✅ নিশ্চিত করুন</button>
@@ -373,131 +343,156 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ⚠️ IMPORTANT: Paste your Apps Script Web App URL here after deployment
-// (See the setup guide, Step: "Deploy the Web App")
-const WEB_APP_URL = "https://nabilahome274.github.io/family-budget-app/";
+// =====================================================================
+// ⚠️ STEP 1: আপনার Google Apps Script Web App URL এখানে পেস্ট করুন
+// Apps Script > Deploy > Manage Deployments > Web App URL কপি করুন
+// URL এর format হবে: https://script.google.com/macros/s/XXXX/exec
+// =====================================================================
+const WEB_APP_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+// Example: const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxXXXXXX/exec";
 
-const typeButtons = document.querySelectorAll('.type-btn');
-const expenseFields = document.getElementById('expenseFields');
-const incomeFields = document.getElementById('incomeFields');
-const savingsFields = document.getElementById('savingsFields');
+// ── State ──
 let currentType = "খরচ";
-let pendingPayload = null; // holds the entry data while user reviews it before saving
+let pendingPayload = null;
 
-document.getElementById('date').valueAsDate = new Date();
-document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('bn-BD', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+// ── DOM refs ──
+const typeButtons   = document.querySelectorAll('.type-btn');
+const expenseFields = document.getElementById('expenseFields');
+const incomeFields  = document.getElementById('incomeFields');
+const savingsFields = document.getElementById('savingsFields');
 
+// ── Init ──
+const today = new Date();
+document.getElementById('date').valueAsDate = today;
+document.getElementById('dateDisplay').textContent = today.toLocaleDateString('bn-BD', {
+  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+});
+
+// ── Type selector ──
 typeButtons.forEach(btn => {
   btn.addEventListener('click', () => {
     typeButtons.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentType = btn.dataset.type;
-
-    expenseFields.style.display = currentType === "খরচ" ? "block" : "none";
-    incomeFields.style.display = currentType === "আয়" ? "block" : "none";
-    savingsFields.style.display = currentType === "সঞ্চয়" ? "block" : "none";
+    showFieldsForType(currentType);
   });
 });
 
+// FIX: Centralized field visibility function (also used after reset)
+function showFieldsForType(type) {
+  expenseFields.style.display = type === "খরচ"  ? "block" : "none";
+  incomeFields.style.display  = type === "আয়"   ? "block" : "none";
+  savingsFields.style.display = type === "সঞ্চয়" ? "block" : "none";
+}
+
+// ── Toast ──
 function showToast(message, isError = false) {
   const toast = document.getElementById('toast');
   toast.textContent = message;
   toast.className = 'toast show' + (isError ? ' error' : '');
-  setTimeout(() => { toast.className = 'toast'; }, 3000);
+  setTimeout(() => { toast.className = 'toast'; }, 3500);
 }
 
+// ── Form submit → show Review screen ──
 document.getElementById('entryForm').addEventListener('submit', function(e) {
   e.preventDefault();
 
-  if (WEB_APP_URL === "PASTE_YOUR_WEB_APP_URL_HERE") {
-    showToast("⚠️ এখনো Web App URL সেট করা হয়নি — গাইড দেখুন", true);
+  // FIX: Check URL is configured
+  if (!WEB_APP_URL || WEB_APP_URL === "PASTE_YOUR_WEB_APP_URL_HERE") {
+    showToast("⚠️ Web App URL সেট করা হয়নি — index.html এ URL পেস্ট করুন", true);
     return;
   }
 
-  const dateVal = document.getElementById('date').value; // YYYY-MM-DD
+  const dateVal = document.getElementById('date').value;
+  if (!dateVal) {
+    showToast("⚠️ তারিখ নির্বাচন করুন", true);
+    return;
+  }
+
   const payload = {
     "এন্ট্রির ধরন": currentType,
     "তারিখ": dateVal,
-    "নোট (ঐচ্ছিক)": document.getElementById('note').value
+    "নোট (ঐচ্ছিক)": document.getElementById('note').value.trim()
   };
 
   let amount = 0;
-  let displayRows = []; // [{label, value, isAmount}] for the review screen
-
-  const dateDisplay = new Date(dateVal).toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric' });
+  let displayRows = [];
+  const dateDisplay = new Date(dateVal + 'T00:00:00').toLocaleDateString('bn-BD', {
+    year: 'numeric', month: 'long', day: 'numeric'
+  });
 
   if (currentType === "খরচ") {
-    payload["খরচের ক্যাটাগরি"] = document.getElementById('expCategory').value;
-    payload["বিস্তারিত/আইটেম (ঐচ্ছিক)"] = document.getElementById('expDetail').value;
-    payload["খরচের পরিমাণ (টাকা)"] = document.getElementById('expAmount').value;
-    payload["পেমেন্ট মেথড"] = document.getElementById('paymentMethod').value;
-    amount = Number(document.getElementById('expAmount').value);
+    const cat    = document.getElementById('expCategory').value;
+    const detail = document.getElementById('expDetail').value.trim();
+    const amt    = document.getElementById('expAmount').value;
+    const pay    = document.getElementById('paymentMethod').value;
 
-    if (!payload["খরচের ক্যাটাগরি"]) {
-      showToast("⚠️ ক্যাটাগরি নির্বাচন করুন", true);
-      return;
-    }
+    if (!cat) { showToast("⚠️ খরচের ক্যাটাগরি নির্বাচন করুন", true); return; }
+    if (!amt || Number(amt) <= 0) { showToast("⚠️ সঠিক পরিমাণ লিখুন", true); return; }
+
+    amount = Number(amt);
+    payload["খরচের ক্যাটাগরি"]           = cat;
+    payload["বিস্তারিত/আইটেম (ঐচ্ছিক)"]  = detail;
+    payload["খরচের পরিমাণ (টাকা)"]        = amt;
+    payload["পেমেন্ট মেথড"]               = pay;
 
     displayRows = [
-      { label: "তারিখ", value: dateDisplay },
-      { label: "ক্যাটাগরি", value: payload["খরচের ক্যাটাগরি"] },
-      { label: "বিস্তারিত/আইটেম", value: payload["বিস্তারিত/আইটেম (ঐচ্ছিক)"] || "—" },
-      { label: "পরিমাণ", value: amount + " টাকা", isAmount: true },
-      { label: "পেমেন্ট মেথড", value: payload["পেমেন্ট মেথড"] || "—" },
-      { label: "নোট", value: payload["নোট (ঐচ্ছিক)"] || "—" }
+      { label: "তারিখ",          value: dateDisplay },
+      { label: "ক্যাটাগরি",     value: cat },
+      { label: "বিস্তারিত",     value: detail || "—" },
+      { label: "পরিমাণ",        value: amount + " টাকা", isAmount: true },
+      { label: "পেমেন্ট মেথড", value: pay || "—" },
+      { label: "নোট",           value: payload["নোট (ঐচ্ছিক)"] || "—" }
     ];
 
   } else if (currentType === "আয়") {
-    payload["আয়ের উৎস"] = document.getElementById('incSource').value;
-    payload["আয়ের পরিমাণ (টাকা)"] = document.getElementById('incAmount').value;
-    amount = Number(document.getElementById('incAmount').value);
+    const src = document.getElementById('incSource').value;
+    const amt = document.getElementById('incAmount').value;
 
-    if (!payload["আয়ের উৎস"]) {
-      showToast("⚠️ আয়ের উৎস নির্বাচন করুন", true);
-      return;
-    }
+    if (!src) { showToast("⚠️ আয়ের উৎস নির্বাচন করুন", true); return; }
+    if (!amt || Number(amt) <= 0) { showToast("⚠️ সঠিক পরিমাণ লিখুন", true); return; }
+
+    amount = Number(amt);
+    payload["আয়ের উৎস"]          = src;
+    payload["আয়ের পরিমাণ (টাকা)"] = amt;
 
     displayRows = [
-      { label: "তারিখ", value: dateDisplay },
-      { label: "আয়ের উৎস", value: payload["আয়ের উৎস"] },
-      { label: "পরিমাণ", value: amount + " টাকা", isAmount: true },
-      { label: "নোট", value: payload["নোট (ঐচ্ছিক)"] || "—" }
+      { label: "তারিখ",    value: dateDisplay },
+      { label: "আয়ের উৎস", value: src },
+      { label: "পরিমাণ",   value: amount + " টাকা", isAmount: true },
+      { label: "নোট",      value: payload["নোট (ঐচ্ছিক)"] || "—" }
     ];
 
   } else if (currentType === "সঞ্চয়") {
-    payload["সঞ্চয়ের ধরন"] = document.getElementById('savType').value;
-    payload["লক্ষ্যের নাম (যদি লক্ষ্যভিত্তিক হয়)"] = document.getElementById('savGoal').value;
-    payload["সঞ্চয়ের পরিমাণ (টাকা)"] = document.getElementById('savAmount').value;
-    amount = Number(document.getElementById('savAmount').value);
+    const type = document.getElementById('savType').value;
+    const goal = document.getElementById('savGoal').value.trim();
+    const amt  = document.getElementById('savAmount').value;
 
-    if (!payload["সঞ্চয়ের ধরন"]) {
-      showToast("⚠️ সঞ্চয়ের ধরন নির্বাচন করুন", true);
-      return;
-    }
+    if (!type) { showToast("⚠️ সঞ্চয়ের ধরন নির্বাচন করুন", true); return; }
+    if (!amt || Number(amt) <= 0) { showToast("⚠️ সঠিক পরিমাণ লিখুন", true); return; }
+
+    amount = Number(amt);
+    payload["সঞ্চয়ের ধরন"]                    = type;
+    payload["লক্ষ্যের নাম (যদি লক্ষ্যভিত্তিক হয়)"] = goal;
+    payload["সঞ্চয়ের পরিমাণ (টাকা)"]           = amt;
 
     displayRows = [
-      { label: "তারিখ", value: dateDisplay },
-      { label: "সঞ্চয়ের ধরন", value: payload["সঞ্চয়ের ধরন"] },
-      { label: "লক্ষ্যের নাম", value: payload["লক্ষ্যের নাম (যদি লক্ষ্যভিত্তিক হয়)"] || "—" },
-      { label: "পরিমাণ", value: amount + " টাকা", isAmount: true },
-      { label: "নোট", value: payload["নোট (ঐচ্ছিক)"] || "—" }
+      { label: "তারিখ",        value: dateDisplay },
+      { label: "সঞ্চয়ের ধরন",  value: type },
+      { label: "লক্ষ্যের নাম",  value: goal || "—" },
+      { label: "পরিমাণ",       value: amount + " টাকা", isAmount: true },
+      { label: "নোট",          value: payload["নোট (ঐচ্ছিক)"] || "—" }
     ];
   }
 
-  if (!amount || amount <= 0) {
-    showToast("⚠️ সঠিক পরিমাণ লিখুন", true);
-    return;
-  }
-
-  // Store payload for the confirm button to use later
+  // Store and show review
   pendingPayload = payload;
-
-  // Build the review screen
   renderReviewScreen(currentType, displayRows);
   document.getElementById('reviewOverlay').classList.add('show');
   window.scrollTo(0, 0);
 });
 
+// ── Build review card HTML ──
 function renderReviewScreen(type, rows) {
   const card = document.getElementById('reviewCard');
   let html = `<div class="review-type-badge ${type}">${typeEmoji(type)} ${type}</div>`;
@@ -513,7 +508,7 @@ function renderReviewScreen(type, rows) {
 
 function typeEmoji(type) {
   if (type === "খরচ") return "📤";
-  if (type === "আয়") return "📥";
+  if (type === "আয়")  return "📥";
   return "💰";
 }
 
@@ -523,58 +518,73 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-// "এডিট করুন" — just hides the review screen, form data is untouched
+// ── Edit button — go back to form ──
 document.getElementById('editBtn').addEventListener('click', () => {
   document.getElementById('reviewOverlay').classList.remove('show');
 });
 
-// "নিশ্চিত করুন" — this is the ONLY place that actually sends data to the Sheet
+// ── Confirm button — send to Google Sheet ──
 document.getElementById('confirmBtn').addEventListener('click', async () => {
   if (!pendingPayload) return;
 
   const confirmBtn = document.getElementById('confirmBtn');
-  const editBtn = document.getElementById('editBtn');
+  const editBtn    = document.getElementById('editBtn');
   confirmBtn.disabled = true;
-  editBtn.disabled = true;
+  editBtn.disabled    = true;
   confirmBtn.textContent = "জমা হচ্ছে...";
 
   try {
+    // FIX: Using no-cors mode workaround — Apps Script accepts text/plain
+    // which avoids the CORS preflight entirely
     const response = await fetch(WEB_APP_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(pendingPayload)
+      body: JSON.stringify(pendingPayload),
+      redirect: 'follow'
     });
 
+    // Apps Script always returns 200 even on error; parse the JSON body
     const result = await response.json();
 
     if (result.success) {
       document.getElementById('reviewOverlay').classList.remove('show');
-      showToast("✅ এন্ট্রি সফলভাবে জমা হয়েছে");
+      showToast("✅ এন্ট্রি সফলভাবে জমা হয়েছে!");
+
+      // FIX: Reset form properly without breaking field visibility
       document.getElementById('entryForm').reset();
       document.getElementById('date').valueAsDate = new Date();
+
+      // FIX: Re-apply correct field visibility after reset
+      // (reset clears select values but doesn't re-hide/show sections)
+      showFieldsForType(currentType);
+
       pendingPayload = null;
+
     } else {
       showToast("❌ এরর: " + (result.error || "অজানা সমস্যা"), true);
       console.error("Server error:", result.error);
     }
 
   } catch (err) {
-    showToast("❌ এরর হয়েছে, আবার চেষ্টা করুন", true);
-    console.error(err);
+    // If response.json() fails, the request might have still succeeded
+    // (Apps Script sometimes returns non-JSON on redirect).
+    // Show a softer message and let user check the Sheet.
+    console.error("Fetch/parse error:", err);
+    showToast("⚠️ নেটওয়ার্ক সমস্যা অথবা সফল হয়েছে — Sheet চেক করুন", true);
   } finally {
     confirmBtn.disabled = false;
-    editBtn.disabled = false;
+    editBtn.disabled    = false;
     confirmBtn.textContent = "✅ নিশ্চিত করুন";
   }
 });
 
-// Register service worker for offline app shell + installability
+// ── Service Worker ──
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
+    navigator.serviceWorker.register('sw.js')
+      .catch(err => console.log('SW registration failed:', err));
   });
 }
 </script>
-
 </body>
 </html>

@@ -2,7 +2,7 @@
 // and caches the app shell so the form still opens even with a weak connection.
 // (Form submission itself still needs internet, since it talks to Google Sheets.)
 
-const CACHE_NAME = 'family-budget-v1';
+const CACHE_NAME = 'family-budget-v2';
 const FILES_TO_CACHE = [
   './index.html',
   './manifest.json'
